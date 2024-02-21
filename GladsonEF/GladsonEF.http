@@ -1,0 +1,6 @@
+@GladsonEF_HostAddress = http://localhost:5250
+
+GET {{GladsonEF_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
