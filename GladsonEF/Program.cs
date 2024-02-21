@@ -49,6 +49,11 @@ try
 
 
     app.MapControllers();
+
+    //Verificando se o banco existe, se não existir ele cria.
+    //Criando Alguns Documentos para testar.
+    app.VerificaExistenciaBanco();
+
     app.Run();
 }
 catch (Exception ex) when (!ex.GetType().Name.Equals("HostAbortedException", StringComparison.Ordinal))
