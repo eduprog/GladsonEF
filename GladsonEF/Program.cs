@@ -26,6 +26,7 @@ try
 
     //adicionando o contexto. 
     //Uso a extensão do WebApplicationBuilder pq ele tem tudo, inclusive as configurações. 
+    //Irá executar de acordo com o provider que estiver configurado no appsettings.json
     builder.AddContextDeTeste();
 
     //Adcionando os serviços de log que serão utilizados pelos middlewares se estiver configurado no appsettings.json

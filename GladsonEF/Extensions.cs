@@ -10,13 +10,31 @@ internal static class ProgramExtensions
 {
     internal static WebApplicationBuilder AddContextDeTeste(this WebApplicationBuilder builder)
     {
-
         //Posso pegar as configurações de varias maneiras 
-        var connStringSqlServer = builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value; 
+        var connStringSqlServer = builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
         var connStringSqlite = builder.Configuration.GetConnectionString("Sqlite");
+
+
+        //Aqui eu pego as configurações dos providers de banco de dados.
+        //Claro que podem ser feitos com enum que é o mais indicado.
+        //Então eu poderia trabalhar com vários providers, cada um com sua migration e pronto.
+        //Fica só para poc e estudo, pois em um caso de ERP próprio , eu usaria apenas um provider.
+        //Podemos criar o método para poder validar os providers e aplicar as migrations de acordo com a necessidade.
+        //Se colocar um break point no switch, vai ver que ele pega o provider do appsettings.json a cada chamada o context. 
+        //Então se eu mudar o provider no appsettings.json, ele vai pegar o novo provider.
+        //Não pense que isto poderá degradar a performance, pois o .NET Core é muito rápido e eficiente.
+        var bdProvider = builder.Configuration.GetSection(nameof(BdProviderSettings)).Get<BdProviderSettings>()!;
         builder.Services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlite(connStringSqlite);
+            switch (bdProvider.Provider)
+            {
+                case "SqlServer":
+                    options.UseSqlServer(connStringSqlServer);
+                    break;
+                default:
+                    options.UseSqlite(connStringSqlite);
+                    break;
+            }
         });
         return builder;
     }
@@ -106,5 +124,5 @@ internal static class ProgramExtensions
 
         };
 
-    }   
+    }
 }
