@@ -16,7 +16,8 @@ internal static class ProgramExtensions
         var connStringSqlite = builder.Configuration.GetConnectionString("Sqlite");
         builder.Services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlite(connStringSqlite);
+            //options.UseSqlite(connStringSqlite);
+            options.UseSqlServer(connStringSqlServer);
         });
         return builder;
     }
@@ -58,6 +59,8 @@ internal static class ProgramExtensions
 
         // usando o context de acordo com suas configurações. 
         using var _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+
 
         if (_context.Database.EnsureCreated())
         {
